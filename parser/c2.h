@@ -404,18 +404,21 @@ inline void load_correct_actionsDev(string file) {
       size_t open_bracket_position = lineS.find('(');
       string actionString;
       if (PREDICT_ATTACHMENTS_ONLY && open_bracket_position != string::npos) {
-	actionString = lineS.substr(0, open_bracket_position);
+	    actionString = lineS.substr(0, open_bracket_position);
 	// string label = lineS.substr(open_bracket_position, lineS.length() - open_bracket_position - 1); /*unused*/
       } else {
-	actionString = lineS;
+	    actionString = lineS;
       }
       auto actionIter = find(actions.begin(), actions.end(), actionString);
       if (actionIter != actions.end()) {
         unsigned actionIndex = distance(actions.begin(), actionIter);
         correct_act_sentDev[sentence_id].push_back(actionIndex);
       } else {
-	cerr << "new actionString in dev set: " << actionString << endl;
-	assert(false);
+          actions.push_back(actionString);
+          correct_act_sentDev[sentence_id].push_back(actions.size()-1);
+	    //cerr << "new actionString in dev set: " << actionString << endl;
+	    //assert(false);
+
         // TODO: right now, new actions which haven't been observed in training
         // are not added to correct_act_sentDev. This may be a problem if the
         // training data is little.
